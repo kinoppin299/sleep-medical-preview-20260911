@@ -2,7 +2,6 @@
   'use strict';
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   document.querySelectorAll('.treatment-video video').forEach(function (video) {
-    var manuallyPaused = false;
     var inView = false;
     video.defaultMuted = true;
     video.muted = true;
@@ -10,21 +9,19 @@
     video.playsInline = true;
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
-    video.controls = true;
+    video.controls = false;
+    video.removeAttribute('controls');
+    video.disablePictureInPicture = true;
     function attemptPlay() {
-      if (reduced.matches || !inView || document.hidden || manuallyPaused || !video.paused) return;
+      if (reduced.matches || !inView || document.hidden || !video.paused) return;
       var request = video.play();
       if (request) request.catch(function () {
-        // Native controls remain usable when a device blocks autoplay.
+        // Retry after a page gesture when a device initially blocks autoplay.
         video.dataset.autoplayState = 'blocked';
       });
     }
     video.addEventListener('playing', function () {
-      manuallyPaused = false;
       video.dataset.autoplayState = 'playing';
-    });
-    video.addEventListener('pause', function () {
-      if (!reduced.matches && !document.hidden && inView && !video.ended) manuallyPaused = true;
     });
     video.addEventListener('canplay', attemptPlay);
     if ('IntersectionObserver' in window) {
@@ -37,13 +34,13 @@
       attemptPlay();
     }
     document.addEventListener('visibilitychange', attemptPlay);
-    document.addEventListener('pointerdown', function (event) {
-      if (event.target !== video) attemptPlay();
+    document.addEventListener('pointerdown', function () {
+      attemptPlay();
     }, { passive: true });
     function motionPreferenceChanged() {
       video.autoplay = !reduced.matches;
       if (reduced.matches) video.pause();
-      else { manuallyPaused = false; attemptPlay(); }
+      else attemptPlay();
     }
     reduced.addEventListener('change', motionPreferenceChanged);
     motionPreferenceChanged();
