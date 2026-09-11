@@ -102,3 +102,12 @@
 
 /* Selective emphasis for the key question, answer, and next action. */
 #article-flow .emphasis-red{color:#c52b28;font-weight:800}
+
+/* Three arrows flow downward to lead into the next image or CTA. */
+#article-flow .flow-arrow{--arrow-step:128px;--arrow-width:240px;--arrow-height:100px;display:block;width:min(var(--arrow-width),100%);height:var(--arrow-height);margin:12px auto 18px;overflow:hidden;color:#c52b28;line-height:0;contain:paint;pointer-events:none}
+#article-flow .flow-arrow .arrow-track{display:block;animation:article-arrow-flow 1.4s cubic-bezier(.55,0,.45,1) infinite}
+#article-flow .flow-arrow .arrow-row{display:flex;height:var(--arrow-step);align-items:flex-start;justify-content:center;padding-top:4px;box-sizing:border-box}
+#article-flow .flow-arrow svg{display:block;width:100%;height:auto;flex:none}
+#article-flow .flow-arrow.close-arrow{--arrow-step:108px;--arrow-width:204px;--arrow-height:86px;margin:8px auto 10px}
+@keyframes article-arrow-flow{0%,18%{transform:translateY(calc(-1 * var(--arrow-step)))}88%,100%{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#article-flow .flow-arrow .arrow-track{animation:none}}
