@@ -99,3 +99,6 @@
 #article-flow #weight .fact span{white-space:nowrap}
 #article-flow .treatment-video video{pointer-events:none}
 #article-flow .treatment-video video::-webkit-media-controls{display:none!important}
+
+/* Selective emphasis for the key question, answer, and next action. */
+#article-flow .emphasis-red{color:#c52b28;font-weight:800}
